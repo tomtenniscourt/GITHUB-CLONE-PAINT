@@ -71,8 +71,13 @@ class Paint extends Component {
     if (!isPainting) return;
 
     const rect = this.canvas.getBoundingClientRect();
-    const x = event.touches[0].clientX - rect.left;
-    const y = event.touches[0].clientY - rect.top;
+    const canvasX = event.touches[0].clientX - rect.left;
+    const canvasY = event.touches[0].clientY - rect.top;
+
+    const canvasWidth = this.canvas.width;
+    const canvasHeight = this.canvas.height;
+    const x = (canvasX / rect.width) * canvasWidth;
+    const y = (canvasY / rect.height) * canvasHeight;
 
     const ctx = this.canvas.getContext("2d");
     ctx.fillStyle = color;
@@ -120,7 +125,7 @@ class Paint extends Component {
             </select>
           </label>
           <label>
-            Color:
+            Colour:
             <input
               type="color"
               value={color}
