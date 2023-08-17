@@ -1,47 +1,42 @@
-# Pokémon Pokédex App
+# Paint Application README
+A simple JavaScript application that allows a user to paint on a blank canvas, using a range of colours and brush sizes. The user can also download their masterpiece to their computer. 
 
-This is a simple React-based web application that allows users to search for and view information about Pokémon using the Pokémon API. The app features interactive input, data fetching, and animations to enhance the user experience. To use this app, enter a Pokémon's ID or name to the search bar, and click **Search**.
+## Screenshot:
+<img width="1917" alt="Screenshot 2023-08-10 at 10 53 54" src="https://github.com/tomtenniscourt/paint/assets/127535435/5b1446ff-2fbc-4ba9-b7d4-7b18df2720fb">
 
-## Code Overview
 
-The main code file for this app is `App.js`, responsible for rendering UI components and managing the logic for fetching and displaying Pokémon data. The `App.css` file is responsible for the styling, which I have kept to a minimum. 
+## Features:
+- **Draw on a Blank Canvas:** Users can draw on the canvas by clicking and dragging the mouse cursor. The drawing is done using circular brush strokes.
+- **Different Brush Sizes:** Users can choose from a range of brush sizes, including Extra Small, Small, Medium, Large, and Extra Large, to create different stroke thicknesses.
+- **Colour Selection:** Users can pick a color using the color input, which updates the brush color in real-time.
+- **Clear Canvas:** The "Clear Canvas" button allows users to erase the entire drawing on the canvas and start over.
+- **Download Image:** The "Download Image" button enables users to save their drawing as a PNG image file on their device.
 
-## Dependencies
+<img width="1917" alt="Screenshot 2023-08-10 at 10 54 48" src="https://github.com/tomtenniscourt/paint/assets/127535435/3784c8fa-564b-4b48-a992-15a13442fe02">
 
-The app relies on the following external libraries:
 
-- **React:** A JavaScript library for building user interfaces.
-- **Axios:** A promise-based HTTP client used for making API requests.
-- **Framer Motion:** A library for adding animations to React components.
+## How It Works
 
-## Features
-- Search for Pokémon by name or ID.
-- Display detailed information about the Pokémon.
-- Animation effects using framer-motion.
-- Dynamically fetch and display Pokémon data from the PokeAPI.
-- Error handling for failed API requests.
+The paint application is built using React. The main component, `Paint`, manages the state and functionality of the app. Here's a breakdown of how the code works:
 
-## Code Explanation
+1. **Initialization:** The initial state of the `Paint` component includes properties such as `isPainting` (to track if the user is drawing), `brushSize` (to store the selected brush size), and `color` (to store the selected color).
 
-### State Management
-The app uses React's state management to handle the user's input for the Pokémon name, the retrieved Pokémon data, and a loading indicator.
+2. **Canvas Setup:** The `componentDidMount` method adds event listeners to the canvas for handling mouse interactions. `startPainting` is called when the user presses the mouse button, indicating the start of drawing. `stopPainting` is called when the user releases the mouse button, indicating the end of drawing. `paint` is continuously called as the user moves the mouse, and it draws on the canvas if `isPainting` is true.
 
-### Fetching Pokémon Data
-The `fetchPokemon` function is responsible for making an asynchronous HTTP request to the PokeAPI using axios. It fetches the data for the entered Pokémon name/ID and updates the state accordingly. If an error occurs, it handles the error and sets the Pokémon data to null.
+3. **Drawing Logic:** The `paint` method calculates the mouse position relative to the canvas, retrieves the 2D drawing context of the canvas, sets the brush color and size, and draws a circular stroke at the calculated position.
 
-### Animation Effects
-The app utilizes the `framer-motion` library to add a simple animation to the components. Animation variants are defined using `containerVariants` and `itemVariants`, which determine the animations for the container and individual items respectively.
+4. **User Interactions:** The component provides user interaction options: changing the brush size and selecting the color. When the brush size dropdown or color input changes, corresponding state values are updated.
 
-### Rendering Pokémon Details
-The fetched Pokémon details are conditionally displayed within a `<motion.div>`. The Pokémon's image, types, abilities, and stats are also displayed, along with animation effects from framer-motion. I also added the `capitalizeFirstLetter` function as the default data fetched from the API was all lowercase.
+5. **Clear Canvas:** Clicking the "Clear Canvas" button calls the `handleClearCanvas` method, which uses the canvas context to clear the entire canvas.
 
-## Contributing
-Contributions to the project are welcome! If you find any issues or have suggestions for improvements, feel free to submit a pull request or open an issue:
+6. **Download Image:** Clicking the "Download Image" button triggers the `handleDownloadImage` method. This method creates a downloadable link for the canvas image in PNG format. When clicked, the link prompts the user to save the image to their device.
 
-1. Fork the repository.
-2. Create a new branch for your new feature or bug fix:
-3. Make your changes and commit them with a descriptive message (e.g. git commit -m "Added feature: your name/username"):
-4. Push your changes to your forked repository:
-5. Open a pull request to the main repository.
+## Getting Started
 
-#Enjoy :) 
+To run the paint application locally:
+
+1. Clone the repository.
+2. Navigate to the project directory in the terminal.
+3. Run `npm install` to install the required dependencies.
+4. Run `npm start` to start the development server.
+5. Open a web browser and go to `http://localhost:3000` to use the paint app.
