@@ -47,13 +47,22 @@ h1 {
 .download {
   padding: 10px 20px;
   font-size: 18px;
-  border: none;
+  width: 17%;
+  border: 1px solid black !important;
   cursor: pointer;
   border-radius: 5px;
   font-family: 'Ysabeau Office', sans-serif;
   color: white;
   margin: 10px;
   transition: transform 0.3s, background-color 0.3s;
+}
+
+.clear {
+  background-color: red;
+}
+
+.download {
+  background-color: rgb(28, 238, 28);
 }
 
 .clear:hover,
