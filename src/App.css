@@ -1,110 +1,108 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Preahvihear&display=swap');
 
-body {
+body,
+html {
   margin: 0;
   padding: 0;
+}
+
+h1 {
+  font-family: 'Preahvihear', sans-serif;
+  font-size: 80px;
+  color: #fff;
+}
+
+.paint-h1 {
+  border: 1px solid #fff;
+  margin-left: 60vh;
+  margin-right: 60vh;
+  border-radius: 10px;
+  background-color: #000000;
+}
+
+.paint-canvas {
+  border: 1px solid #000000;
+  border-radius: 10px;
+  cursor: crosshair;
+  background-color: white;
+}
+
+.button {
+  padding: 10px 20px;
+  font-size: 18px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.clear {
+  background-color: red;
+  border-radius: 5px;
+  font-family: 'Ysabeau Office', sans-serif;
+  font-size: 20px;
+  color: white;
+  margin: 10px;
+}
+
+.clear:hover {
+  transform: scale(1.1);
+  background-color: darkred;
+}
+
+.download {
+  background-color: #4caf50;
+  border-radius: 5px;
+  font-family: 'Ysabeau Office', sans-serif;
+  color: white;
+  font-size: 20px;
+}
+
+.download:hover {
+  transform: scale(1.1);
+  background-color: #45a049;
+}
+
+.paint-page-content {
+  text-align: center;
+  background-image: url('https://i.imgur.com/4skF7JA.jpeg');
+  background-size: cover;
+  height: 100vh;
+}
+
+.paint-h1 {
+  border: 1px solid #fff;
+  margin-left: 10%;
+  margin-right: 10%;
+  border-radius: 10px;
+  background-color: #000000;
+}
+
+.paint-canvas {
+  border: 1px solid #000000;
+  border-radius: 10px;
+  cursor: crosshair;
+  background-color: white;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+}
+
+.controls {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  min-height: 100vh;
-  background-color: #FB1B1B;
-  font-family: 'Press Start 2P', cursive;
 }
 
-.Pokemon-App {
-  text-align: center;
-}
-
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.search-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.btn-primary {
-  margin-left: 10px;
-  height: 35px;
-  font-family: 'Press Start 2P', cursive;
-}
-
-.Pokemon-App {
-  text-align: center;
-}
-
-.name {
-  font-size: 30px;
-  margin-top: 20px;
-  margin-bottom: -20px;
-}
-
-.pokemon-image {
-  width: 200px;
-  height: 200px;
-}
-
-.stats p {
+.controls label {
   margin-bottom: 5px;
 }
 
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+.controls input,
+.controls select {
+  margin-bottom: 10px;
 }
 
-.grid-item {
-  margin-top: 20px;
-  padding-bottom: 20px;
-  border: 5px solid #0075BE;
-  background-color: #FFCC00;
-  border-radius: 10px;
-  padding: 10px;
-}
-
-.pokemon-logo {
-  height: 150px;
-}
-
-h3 {
-  color: #0A285F;
-}
-
-p {
-  color: #0075BE;
-}
-
-/* Media Query for Mobile Devices */
-@media (max-width: 480px) {
-  .container {
-    max-width: 100%;
-    padding: 10px;
-  }
-
-  .name {
-    font-size: 20px;
-    margin-top: 15px;
-  }
-
-  .pokemon-image {
-    width: 100px;
-    height: 100px;
-  }
-
-  .grid-container {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
-  .grid-item {
-    margin-top: 10px;
-    padding-bottom: 10px;
-    border-width: 3px;
-    padding: 5px;
-  }
+.clear,
+.download {
+  margin: 10px;
 }

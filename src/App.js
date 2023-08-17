@@ -1,184 +1,128 @@
-import React, { useState, useEffect } from "react";
+import React, { Component } from "react";
 import "./App.css";
-import axios from "axios";
-import { motion } from "framer-motion";
 
-const containerVariants = {
-  hidden: { opacity: 1, scale: 0 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: {
-      delayChildren: 0.3,
-      staggerChildren: 0.2,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { y: 20, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-  },
-};
-
-function App() {
-  const [pokemonName, setPokemonName] = useState("");
-  const [pokemonData, setPokemonData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-const handleKeyDown = (e) => {
-  if (e.key === "Enter") {
-    fetchPokemon();
-    window.scrollTo(0, 0); 
+class Paint extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isPainting: false,
+      brushSize: 5,
+      color: "#000000",
+    };
   }
-};
 
-  const fetchPokemon = async () => {
-    if (pokemonName.trim() !== "") {
-      try {
-        setIsLoading(true);
-        const response = await axios.get(
-          `https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`
-        );
-        setPokemonData(response.data);
-      } catch (error) {
-        console.error("Error fetching Pokémon:", error);
-        setPokemonData(null);
-      } finally {
-        setIsLoading(false);
-      }
-    }
+  componentDidMount() {
+    this.canvas.addEventListener("mousedown", this.startPainting);
+    this.canvas.addEventListener("mouseup", this.stopPainting);
+    this.canvas.addEventListener("mousemove", this.paint);
+  }
+
+  componentWillUnmount() {
+    this.canvas.removeEventListener("mousedown", this.startPainting);
+    this.canvas.removeEventListener("mouseup", this.stopPainting);
+    this.canvas.removeEventListener("mousemove", this.paint);
+    window.removeEventListener("resize", this.handleResize);
+  }
+
+  handleResize = () => {
+    const canvas = this.canvas;
+    canvas.width = Math.min(window.innerWidth * 0.8, 600);
+    canvas.height = Math.min(window.innerHeight * 0.6, 400);
   };
 
-  const capitalizeFirstLetter = (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+  startPainting = () => {
+    this.setState({ isPainting: true });
   };
 
-  useEffect(() => {
-    setPokemonData(null);
-  }, [pokemonName]);
+  stopPainting = () => {
+    this.setState({ isPainting: false });
+  };
 
-  return (
-    <div className="Pokemon-App container">
-      <img
-        src="https://i.imgur.com/1Etib7y.png"
-        alt="Pokemon Logo"
-        className="pokemon-logo"
-      />
-      {/* <h1 className="text-center mt-5">Pokémon Pokédex</h1> */}
-      <div className="search-container">
-        <input
-          type="text"
-          placeholder="Enter Pokémon ID"
-          value={pokemonName}
-          onChange={(e) => setPokemonName(e.target.value)}
-          onKeyDown={handleKeyDown}
-        />
-        <button className="btn btn-primary" onClick={fetchPokemon}>
-          Search
+  paint = (event) => {
+    const { isPainting, brushSize, color } = this.state;
+    if (!isPainting) return;
+
+    const rect = this.canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    const ctx = this.canvas.getContext("2d");
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(x, y, brushSize, 0, Math.PI * 2);
+    ctx.fill();
+  };
+
+  handleClearCanvas = () => {
+    const ctx = this.canvas.getContext("2d");
+    ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  };
+
+  handleBrushSizeChange = (event) => {
+    this.setState({ brushSize: parseInt(event.target.value) });
+  };
+
+  handleColorChange = (event) => {
+    this.setState({ color: event.target.value });
+  };
+
+  handleDownloadImage = () => {
+    const canvas = this.canvas;
+    const link = document.createElement("a");
+    link.download = "painting.png";
+    link.href = canvas.toDataURL();
+    link.click();
+  };
+
+  render() {
+    const { brushSize, color } = this.state;
+
+    return (
+      <div className="paint-page-content">
+        <br />
+        <h1 className="paint-h1">Paint by Tom</h1>
+        <div className="controls">
+          <label>
+            Brush Size:
+            <select value={brushSize} onChange={this.handleBrushSizeChange}>
+              <option value={1}>Extra Small</option>
+              <option value={3}>Small</option>
+              <option value={5}>Medium</option>
+              <option value={10}>Large</option>
+              <option value={20}>Extra Large</option>
+            </select>
+          </label>
+          <br />
+          <br />
+          <label>
+            Colour:
+            <input
+              type="color"
+              value={color}
+              onChange={this.handleColorChange}
+            />
+          </label>
+          <br />
+          <br />
+        </div>
+        <canvas
+          ref={(ref) => (this.canvas = ref)}
+          className="paint-canvas"
+          width={Math.min(window.innerWidth * 0.8, 600)}
+          height={Math.min(window.innerHeight * 0.6, 400)}
+        ></canvas>
+
+        <br />
+        <button className="clear" onClick={this.handleClearCanvas}>
+          Clear Canvas
         </button>
+        <button className="download" onClick={this.handleDownloadImage}>
+          Download Image
+        </button>
+        <br />
       </div>
-
-      {pokemonData && (
-        <motion.div key={pokemonData.id} className="total-data mt-5">
-          {/* Image Animation */}
-          <motion.h2
-            className="name"
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.5 }}
-          >
-            {capitalizeFirstLetter(pokemonData.name)}
-          </motion.h2>
-
-          <motion.img
-            src={pokemonData.sprites.front_default}
-            alt={pokemonData.name}
-            className="pokemon-image"
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1 }}
-          />
-
-          {/* Delayed Data */}
-          {!isLoading && (
-            <motion.div
-              className="details-container"
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-            >
-              <div className="grid-container">
-                <motion.div
-                  className="grid-item details"
-                  variants={itemVariants}
-                >
-                  <h3>Details:</h3>
-                  <p>Height: {pokemonData.height / 10} meters</p>
-                  <p>Weight: {pokemonData.weight / 10} kg</p>
-                </motion.div>
-
-                <motion.div className="grid-item types" variants={itemVariants}>
-                  <h3>Types:</h3>
-                  {pokemonData.types.map((type) => (
-                    <p key={type.type.name}>
-                      {capitalizeFirstLetter(type.type.name)}
-                    </p>
-                  ))}
-                </motion.div>
-
-                <motion.div
-                  className="grid-item abilities"
-                  variants={itemVariants}
-                >
-                  <h3>Abilities:</h3>
-                  {pokemonData.abilities.map((ability) => (
-                    <p key={ability.ability.name}>
-                      {capitalizeFirstLetter(ability.ability.name)}
-                    </p>
-                  ))}
-                </motion.div>
-
-                <motion.div className="grid-item stats" variants={itemVariants}>
-                  <h3>Stats:</h3>
-                  <div className="bulletpoints">
-                    <div className="stats-columns">
-                      <div className="stats-column">
-                        {pokemonData.stats.slice(0, 3).map((stat) => (
-                          <p key={stat.stat.name}>
-                            {capitalizeFirstLetter(stat.stat.name)}:{" "}
-                            {stat.base_stat}
-                          </p>
-                        ))}
-                      </div>
-                      <div className="stats-column">
-                        {pokemonData.stats.slice(3, 6).map((stat) => (
-                          <p key={stat.stat.name}>
-                            {capitalizeFirstLetter(stat.stat.name)}:{" "}
-                            {stat.base_stat}
-                          </p>
-                        ))}
-                      </div>
-                      <div className="stats-column">
-                        {pokemonData.stats.slice(6).map((stat) => (
-                          <p key={stat.stat.name}>
-                            {capitalizeFirstLetter(stat.stat.name)}:{" "}
-                            {stat.base_stat}
-                          </p>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              </div>
-            </motion.div>
-          )}
-        </motion.div>
-      )}
-    </div>
-  );
+    );
+  }
 }
 
-export default App;
+export default Paint;
