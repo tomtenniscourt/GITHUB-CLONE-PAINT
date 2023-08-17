@@ -15,12 +15,20 @@ class Paint extends Component {
     this.canvas.addEventListener("mousedown", this.startPainting);
     this.canvas.addEventListener("mouseup", this.stopPainting);
     this.canvas.addEventListener("mousemove", this.paint);
+    this.canvas.addEventListener("touchstart", this.startPaintingTouch);
+    this.canvas.addEventListener("touchend", this.stopPainting);
+    this.canvas.addEventListener("touchmove", this.paintTouch);
+    window.addEventListener("resize", this.handleResize);
+    this.handleResize(); // Initial resize
   }
 
   componentWillUnmount() {
     this.canvas.removeEventListener("mousedown", this.startPainting);
     this.canvas.removeEventListener("mouseup", this.stopPainting);
     this.canvas.removeEventListener("mousemove", this.paint);
+    this.canvas.removeEventListener("touchstart", this.startPaintingTouch);
+    this.canvas.removeEventListener("touchend", this.stopPainting);
+    this.canvas.removeEventListener("touchmove", this.paintTouch);
     window.removeEventListener("resize", this.handleResize);
   }
 
@@ -45,6 +53,26 @@ class Paint extends Component {
     const rect = this.canvas.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
+
+    const ctx = this.canvas.getContext("2d");
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(x, y, brushSize, 0, Math.PI * 2);
+    ctx.fill();
+  };
+
+  startPaintingTouch = (event) => {
+    event.preventDefault();
+    this.startPainting();
+  };
+
+  paintTouch = (event) => {
+    const { isPainting, brushSize, color } = this.state;
+    if (!isPainting) return;
+
+    const rect = this.canvas.getBoundingClientRect();
+    const x = event.touches[0].clientX - rect.left;
+    const y = event.touches[0].clientY - rect.top;
 
     const ctx = this.canvas.getContext("2d");
     ctx.fillStyle = color;
@@ -79,7 +107,6 @@ class Paint extends Component {
 
     return (
       <div className="paint-page-content">
-        <br />
         <h1 className="paint-h1">Paint by Tom</h1>
         <div className="controls">
           <label>
@@ -92,34 +119,25 @@ class Paint extends Component {
               <option value={20}>Extra Large</option>
             </select>
           </label>
-          <br />
-          <br />
           <label>
-            Colour:
+            Color:
             <input
               type="color"
               value={color}
               onChange={this.handleColorChange}
             />
           </label>
-          <br />
-          <br />
         </div>
         <canvas
           ref={(ref) => (this.canvas = ref)}
           className="paint-canvas"
-          width={Math.min(window.innerWidth * 0.8, 600)}
-          height={Math.min(window.innerHeight * 0.6, 400)}
         ></canvas>
-
-        <br />
         <button className="clear" onClick={this.handleClearCanvas}>
           Clear Canvas
         </button>
         <button className="download" onClick={this.handleDownloadImage}>
           Download Image
         </button>
-        <br />
       </div>
     );
   }
