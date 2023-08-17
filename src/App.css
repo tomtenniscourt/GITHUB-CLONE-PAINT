@@ -47,7 +47,7 @@ h1 {
 .download {
   padding: 10px 20px;
   font-size: 18px;
-  width: 17%;
+  width: 100px;
   border: 1px solid black !important;
   cursor: pointer;
   border-radius: 5px;

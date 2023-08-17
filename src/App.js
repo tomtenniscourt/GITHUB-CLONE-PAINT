@@ -138,10 +138,10 @@ class Paint extends Component {
           className="paint-canvas"
         ></canvas>
         <button className="clear" onClick={this.handleClearCanvas}>
-          Clear Canvas
+          Clear
         </button>
         <button className="download" onClick={this.handleDownloadImage}>
-          Download Image
+          Download
         </button>
       </div>
     );
